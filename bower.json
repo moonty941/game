@@ -1,0 +1,23 @@
+{
+  "name": "memory_game",
+  "description": "",
+  "main": "Gruntfile.js",
+  "authors": [
+    "Evseev Aleksander <aleksevseev@yandex.ru>"
+  ],
+  "license": "BSD-2-Clause",
+  "moduleType": [],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "normalize-css": "~3.0.3"
+  }
+}
