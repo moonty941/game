@@ -22,23 +22,7 @@
 	height: 540px;
 	padding: 24px;
 	float: left;
-
-	div{
-		background: url('../images/texture_2_by_keymoon.jpg') 0 0 no-repeat;
-	-webkit-background-size: cover;
-
-	background-size: cover;
-
-		border:#000 1px solid;
-		width:71px;
-		height:71px;
-		float:left;
-		margin:10px;
-		padding:20px;
-		font-size:64px;
-		cursor:pointer;
-		text-align:center;
-	}
+	
 }
 
 #timer, .best_result{
@@ -73,3 +57,58 @@ button{
 	font-weight: bold;
 }
 
+
+/**card-container**/
+
+.card-container{
+	-webkit-perspective: 1000;
+	float: left;
+	margin: 10px;
+	cursor:pointer;
+}
+
+.card-container.hover .card{
+	transform: rotateY(180deg);
+}
+
+.card-container, .card{
+	width: 111px;
+	height: 111px;
+}
+
+.card{
+	border:#000 1px solid;
+	transition: all 0.6s linear;
+	transform-style: preserve-3d;
+	position: relative;
+}
+
+.front, .back{
+	backface-visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.front{
+	z-index: 2;
+	background: url('../images/texture_2_by_keymoon.jpg') 0 0 no-repeat;
+	width: 71px;
+	height: 71px;
+	padding: 20px;	
+
+}
+
+.back{
+	transform: rotateY(180deg);
+	-webkit-background-size: cover;
+
+	background-size: cover;
+		width: 71px;
+		height: 71px;
+		padding: 20px;	
+		font-size:64px;
+		
+		text-align:center;
+		background: #fff;
+}
