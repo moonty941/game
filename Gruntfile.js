@@ -19,11 +19,49 @@ module.exports = function(grunt){
 				files:['less/*.less'],
 				tasks:['less']
 			}
+		},
+
+		uglify:{
+			dev:{
+				files:{
+					'dev/js/main.min.js': 'js/main.js'
+				}
+			}
+		},
+
+		cssmin:{
+			dev:{
+				files:{
+					'dev/css/style.min.css':'css/style.css'
+				}
+			}
+		},
+		copy:{
+			images:{
+				expand:true,
+				src:['**'],
+				cwd:'images/',
+				dest:'dev/images/',
+				filter:'isFile'
+			},
+			index:{
+				expand:true,
+				src:['index.html'],
+				cwd:'./',
+				dest:'dev/',
+				flatten:true,
+				filter:'isFile'
+			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
 	grunt.registerTask('default', ['watch']);
+
+	grunt.registerTask('build',['less','cssmin','uglify','copy']);
 };
