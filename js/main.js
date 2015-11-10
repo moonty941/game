@@ -1,17 +1,21 @@
 
 /*-------------------------------------------------*/
-var memory_array = ['A','A','B','B','C','C','D','D','E','E','F','F','G','G','H','H','I','I','J','J'];
+// var memory_array = ['A','A','B','B','C','C','D','D','E','E','F','F','G','G','H','H','I','I','J','J'];
+var memory_array = ['A','A','B','B'];
+
 var memory_values = [];
 var memory_tile_ids = [];
 var title_flipped = 0;
 var bestResult;
+var bestRecords = +getBestResult();
+var action = (bestRecords > 0) ? 'update' : 'set'; 
 
 if(getCookie('result') !== undefined){
 	bestResult = getCookie('result');
 	document.getElementById('best_result').innerHTML = 'лучший результат: '+ bestResult;
 }
 var settingsCookie = {
-	expires: 3600
+	expires: 315360000
 
 };
 
@@ -33,8 +37,8 @@ function newBoard(){
 	var show = '';
     memory_array.memory_tile_shuffle();
 	for(var i = 0; i < memory_array.length; i++){
-		output += '<div class="card-container" id="tile_'+i+'" onclick="memoryFlipTile(this,\''+memory_array[i]+'\')"><div class="card"><div class="front"></div><div class="back">'+ memory_array[i] +'</div></div></div>';
-		show +='<div class="card-container hover"><div class="card"><div class="front"></div><div class="back">'+memory_array[i]+'</div></div></div>';
+		output += '<div class="card-container" id="tile_'+i+'" onclick="memoryFlipTile(this,\''+memory_array[i]+'\')"><div class="front"></div><div class="back">'+ memory_array[i] +'</div></div>';
+		show +='<div class="card-container hover"><div class="front"></div><div class="back">'+memory_array[i]+'</div></div>';
 	}
 
 	document.getElementById('memory_board').innerHTML = show;
@@ -47,8 +51,8 @@ function newBoard(){
 
 
 function memoryFlipTile(tile,val){
-	var back = tile.children[0].lastElementChild;
-	console.log(back);
+	var back = tile.lastElementChild;
+	// console.log(back);
 	if(tile.className !== 'card-container hover' && memory_values.length < 2){
 		tile.className = 'card-container hover';
 		if(memory_values.length == 0){
@@ -65,13 +69,35 @@ function memoryFlipTile(tile,val){
 				// Check to see if the whole board is cleared
 				if(tiles_flipped == memory_array.length){
 					
-					if(bestResult == undefined || bestResult > timer){
+					if(bestResult == undefined || +bestResult > +timer){
 						bestResult = timer;
 						setCookie('result', bestResult, settingsCookie);
+						
+
+						if(+bestResult < bestRecords || bestRecords == 0){
+							var record = prompt('Новый рекорд!!!! '+ bestResult +'Введите Ваше имя');
+							if(record !== null && record !== ''){
+
+								var xhr = new XMLHttpRequest();
+								var body = 'action='+encodeURIComponent(action)+'&name='+encodeURIComponent(record)+'&result='+encodeURIComponent(bestResult);
+								xhr.open('GET','http://localhost/test/memory_game/index.php?'+body,true);
+								xhr.onreadystatechange = function() {
+								  if (this.readyState != 4) return;
+
+								  console.log( this.responseText );
+								}
+								xhr.send();
+							}
+						}
 					}
 
+					
+
 					document.getElementById('best_result').innerHTML = 'лучший результат: '+ bestResult;
-					alert("Ваш результат " + timer + ' сек, нажмине ок, чтобы начать игру сначала');
+					if(+bestResult > bestRecords){
+						alert("Ваш результат " + timer + ' сек, нажмине ок, чтобы начать игру сначала');
+					}
+					
 					reset();
 				}
 			} else {
@@ -171,7 +197,25 @@ function getCookie(name) {
 
 
 function resetResult(){
-	bestResult = 0;
+	bestResult = undefined;
 	deleteCookie('result');
 	document.getElementById('best_result').innerHTML = 'лучший результат: нет';
 }
+
+function getBestResult(){
+	var result;
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET','http://localhost/test/memory_game/database.php?action='+encodeURIComponent('get_result'),false);
+	xhr.onreadystatechange = function() {
+							  if (this.readyState != 4) return;
+
+							  result = this.responseText;
+							}
+	xhr.send();
+	return result;
+}
+
+// console.log("transform" in window.document.body.style);
+
+
+console.log(+getBestResult());

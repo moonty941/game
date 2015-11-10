@@ -24,7 +24,7 @@ module.exports = function(grunt){
 		uglify:{
 			dev:{
 				files:{
-					'dev/js/main.min.js': 'js/main.js'
+					'dev/js/main.js': 'js/main.js'
 				}
 			}
 		},
@@ -32,7 +32,7 @@ module.exports = function(grunt){
 		cssmin:{
 			dev:{
 				files:{
-					'dev/css/style.min.css':'css/style.css'
+					'dev/css/style.css':['bower_components/normalize-css/normalize.css','css/style.css']
 				}
 			}
 		},
