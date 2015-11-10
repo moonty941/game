@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once('database.php');
 $results = get($DB);
 ?>
@@ -14,16 +14,15 @@ $results = get($DB);
 		<div class="menu">
 			<div id="timer">Таймер: 0 сек</div>
 			<div class="best_result" id="best_result">Лучший результат: нет</div>
+
+			<?php if($results): ?>
 			<div class="records">
 				<h2>Рекорды</h2>
 				<?php 
-				if($results){
-					
-						echo $results['name'].' - '.$results['result'].' сек<br />';
-					
-				}
+				echo $results['name'].' - '.$results['result'].' сек<br />';
 				?>
 			</div>
+			<?php endif; ?>	
 			<div class="controls">
 				<button class="start" onclick="start();">Начать игру</button>
 				<button class="reset" onclick="reset();">Сброс</button><button class="resetResult" onclick="resetResult();">Обнулить результат</button>

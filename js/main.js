@@ -1,18 +1,16 @@
 
 /*-------------------------------------------------*/
-// var memory_array = ['A','A','B','B','C','C','D','D','E','E','F','F','G','G','H','H','I','I','J','J'];
-var memory_array = ['A','A','B','B'];
-
+var memory_array = ['A','A','B','B','C','C','D','D','E','E','F','F','G','G','H','H','I','I','J','J'];
 var memory_values = [];
 var memory_tile_ids = [];
 var title_flipped = 0;
 var bestResult;
-var bestRecords = +getBestResult();
-var action = (bestRecords > 0) ? 'update' : 'set'; 
+var bestRecords;
+var action;
 
 if(getCookie('result') !== undefined){
 	bestResult = getCookie('result');
-	document.getElementById('best_result').innerHTML = 'лучший результат: '+ bestResult;
+	document.getElementById('best_result').innerHTML = 'Лучший результат: '+ bestResult;
 }
 var settingsCookie = {
 	expires: 315360000
@@ -68,35 +66,36 @@ function memoryFlipTile(tile,val){
             	memory_tile_ids = [];
 				// Check to see if the whole board is cleared
 				if(tiles_flipped == memory_array.length){
+					clearInterval(interval);
+					alert("Ваш результат " + timer + ' сек, нажмине ок, чтобы начать игру сначала');
 					
 					if(bestResult == undefined || +bestResult > +timer){
 						bestResult = timer;
 						setCookie('result', bestResult, settingsCookie);
-						
+						bestRecords = +getBestResult();
+						action = (bestRecords > 0) ? 'update' : 'set';
 
 						if(+bestResult < bestRecords || bestRecords == 0){
-							var record = prompt('Новый рекорд!!!! '+ bestResult +'Введите Ваше имя');
+							var record = prompt('Новый рекорд!!!! '+ bestResult +' Введите Ваше имя');
 							if(record !== null && record !== ''){
 
 								var xhr = new XMLHttpRequest();
-								var body = 'action='+encodeURIComponent(action)+'&name='+encodeURIComponent(record)+'&result='+encodeURIComponent(bestResult);
-								xhr.open('GET','http://localhost/test/memory_game/index.php?'+body,true);
+								var data = 'action='+encodeURIComponent(action)+'&name='+encodeURIComponent(record)+'&result='+encodeURIComponent(bestResult);
+								xhr.open('POST',window.location.href+'index.php?',true);
+								xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 								xhr.onreadystatechange = function() {
 								  if (this.readyState != 4) return;
+								  location.reload();
 
-								  console.log( this.responseText );
 								}
-								xhr.send();
+								xhr.send(data);
 							}
 						}
 					}
 
 					
 
-					document.getElementById('best_result').innerHTML = 'лучший результат: '+ bestResult;
-					if(+bestResult > bestRecords){
-						alert("Ваш результат " + timer + ' сек, нажмине ок, чтобы начать игру сначала');
-					}
+					document.getElementById('best_result').innerHTML = 'Лучший результат: '+ bestResult;
 					
 					reset();
 				}
@@ -197,25 +196,27 @@ function getCookie(name) {
 
 
 function resetResult(){
+	bestRecords = +getBestResult();
+	action = (bestRecords > 0) ? 'update' : 'set';
 	bestResult = undefined;
 	deleteCookie('result');
-	document.getElementById('best_result').innerHTML = 'лучший результат: нет';
+	document.getElementById('best_result').innerHTML = 'Лучший результат: нет';
 }
 
 function getBestResult(){
 	var result;
+	var data = 'action='+encodeURIComponent('get_result');
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET','http://localhost/test/memory_game/database.php?action='+encodeURIComponent('get_result'),false);
+	xhr.open('POST',window.location.href+'database.php?',false);
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.onreadystatechange = function() {
 							  if (this.readyState != 4) return;
 
 							  result = this.responseText;
 							}
-	xhr.send();
+	xhr.send(data);
 	return result;
 }
 
 // console.log("transform" in window.document.body.style);
 
-
-console.log(+getBestResult());

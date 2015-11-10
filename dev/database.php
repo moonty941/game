@@ -16,13 +16,13 @@ if(isset($_POST['action']) && function_exists($_POST['action'])){
 }
 
 function get($db){
-	$STH = $db->query("SELECT * FROM result");
+	$STH = $db->query("SELECT * FROM games");
 	$results = $STH->fetch(PDO::FETCH_ASSOC);
 	return $results;
 }
 
 function update($db){
-	$STH = $db->prepare("UPDATE result SET name = :name , result = :result");
+	$STH = $db->prepare("UPDATE games SET name = :name , result = :result");
 	$STH->bindParam(':name', $_POST['name'], PDO::PARAM_STR);
 	$STH->bindParam(':result', $_POST['result'], PDO::PARAM_INT);
 	$STH->execute();
@@ -31,7 +31,7 @@ function update($db){
 }
 
 function set($db){
-	$STH = $db->prepare("INSERT INTO result (name, result) VALUES (:name, :result)");
+	$STH = $db->prepare("INSERT INTO games (name, result) VALUES (:name, :result)");
 	$STH->bindParam(':name', $_POST['name'], PDO::PARAM_STR);
 	$STH->bindParam(':result', $_POST['result'], PDO::PARAM_INT);
 	$STH->execute();
@@ -40,7 +40,7 @@ function set($db){
 }
 
 function get_result($db){
-	$STH = $db->query("SELECT result FROM result");
+	$STH = $db->query("SELECT result FROM games");
 	$results = $STH->fetch(PDO::FETCH_ASSOC);
 	echo $results['result'];
 }

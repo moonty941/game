@@ -46,7 +46,7 @@ module.exports = function(grunt){
 			},
 			index:{
 				expand:true,
-				src:['index.html'],
+				src:['index.php','database.php','settings.php'],
 				cwd:'./',
 				dest:'dev/',
 				flatten:true,
