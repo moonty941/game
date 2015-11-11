@@ -80,8 +80,8 @@ function memoryFlipTile(tile,val){
 							if(record !== null && record !== ''){
 
 								var xhr = new XMLHttpRequest();
-								var data = 'action='+encodeURIComponent(action)+'&name='+encodeURIComponent(record)+'&result='+encodeURIComponent(bestResult);
-								xhr.open('POST',window.location.href+'index.php?',true);
+								var data = 'action='+encodeURIComponent(action)+'&name='+encodeURIComponent(record)+'&result='+encodeURIComponent(bestResult)+'&token='+encodeURIComponent(TOKEN);
+								xhr.open('POST',window.location.href+'database.php?',true);
 								xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 								xhr.onreadystatechange = function() {
 								  if (this.readyState != 4) return;
@@ -205,7 +205,7 @@ function resetResult(){
 
 function getBestResult(){
 	var result;
-	var data = 'action='+encodeURIComponent('get_result');
+	var data = 'action='+encodeURIComponent('get_result')+'&token='+encodeURIComponent(TOKEN);
 	var xhr = new XMLHttpRequest();
 	xhr.open('POST',window.location.href+'database.php?',false);
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

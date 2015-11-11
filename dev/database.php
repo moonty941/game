@@ -1,4 +1,5 @@
 <?php 
+if(!isset($session)) session_start();
 require_once('settings.php'); 
 try{
 	$DB = new PDO("mysql:host=".HOST.";dbname=".DBNAME, USER, PASSWORD);
@@ -9,8 +10,7 @@ catch(PDOException $e){
 	echo $e->getMessage('Ошибка подключения');
 }
 
-
-if(isset($_POST['action']) && function_exists($_POST['action'])){
+if(isset($_POST['action']) && function_exists($_POST['action']) && $_POST['token'] == $_SESSION['token']){
 	$run = $_POST['action'];
 	$run($DB);
 }
@@ -35,7 +35,7 @@ function set($db){
 	$STH->bindParam(':name', $_POST['name'], PDO::PARAM_STR);
 	$STH->bindParam(':result', $_POST['result'], PDO::PARAM_INT);
 	$STH->execute();
-	
+	echo $_POST['token'].' '.$_SESSION['token'];
 	exit();
 }
 

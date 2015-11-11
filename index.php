@@ -1,4 +1,6 @@
 <?php
+$session = session_start();
+$token = $_SESSION['token'] = md5(uniqid(mt_rand(),1));
 require_once('database.php');
 $results = get($DB);
 ?>
@@ -8,6 +10,7 @@ $results = get($DB);
 	<meta charset="UTF-8">
 	<title>game</title>
 	<link rel="stylesheet" href="css/style.css">
+	<script>TOKEN = '<?php echo $token; ?>'</script>
 </head>
 <body>
 	<div class="wrapper">
